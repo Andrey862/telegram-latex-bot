@@ -6,7 +6,6 @@ from flask import Flask, request
 from telegram import Bot, Update
 from telegram.ext import Dispatcher
 
-from config import HOSTING_URL, TOKEN
 from telegram_dispatcher import get_dispatcher
 
 # ------- Loggging-----------
@@ -17,6 +16,15 @@ formatter = logging.Formatter(
 stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
+
+try:
+    from config import HOSTING_URL, TOKEN
+    logger.info("config.py found")
+except ImportError:
+    import os
+    logger.info("config.py not found, taking token from system variables")
+    TOKEN = os.getenv("TOKEN")
+    HOSTING_URL = os.getenv("HOSTING_URL")
 
 app = Flask(__name__)
 

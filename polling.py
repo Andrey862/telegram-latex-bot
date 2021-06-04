@@ -13,8 +13,6 @@ import logging
 from telegram.ext import  Updater
 from telegram_dispatcher import get_dispatcher
 
-from config import TOKEN
-
 # ------- Loggging-----------
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -24,6 +22,13 @@ stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 
+try:
+    from config import TOKEN
+    logger.info("config.py found")
+except ImportError:
+    import os
+    logger.info("config.py not found, taking token from system variables")
+    TOKEN = os.getenv("TOKEN")
 
 def main() -> None:
     updater = Updater(TOKEN)
