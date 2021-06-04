@@ -62,7 +62,7 @@ Then click on "Web" in navigation bar and then:
 - "Python 3.8"
 
 Find "code section"
-![code](README\code.jpg)
+![code](README/code.jpg)
 change Source code line to "telegram-latex-bot"
 
 Change WSGI configuration file to the next 
