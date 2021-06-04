@@ -1,5 +1,3 @@
-
-
 import logging
 import traceback
 import urllib.parse
@@ -27,7 +25,7 @@ logger.addHandler(stream_handler)
 
 def start(update: Update, _: CallbackContext) -> None:
     """Send a message when the command /start is issued."""
-    update.message.reply_text(r'This is inline bot of 80 lines of code. Try typing "@Latex_reader_bot \alpha" in any chat')
+    update.message.reply_text(r'This is very simple inline bot. Try typing "@Latex_reader_bot \alpha" in any chat')
 
 def inlinequery(update: Update, _: CallbackContext) -> None:
     """Handle the inline query."""
@@ -46,7 +44,7 @@ def inlinequery(update: Update, _: CallbackContext) -> None:
         suggest=''
         if (last_word):
             commands = search_command(last_word[-1], 5)
-            suggest = '\n'+' '.join(commands)
+            suggest = ' '.join(commands)
 
         simple = LatexNodes2Text().latex_to_text(query)
         text = f"{escape_markdown(query)}\n {escape_markdown(simple)}\n [.]({url})"
@@ -56,7 +54,7 @@ def inlinequery(update: Update, _: CallbackContext) -> None:
                 title = query,
                 input_message_content=InputTextMessageContent(text, parse_mode=ParseMode.MARKDOWN),
                 thumb_url = url2,
-                description=simple + suggest,
+                description=simple + '\n' + suggest,
             ),
         ]
         update.inline_query.answer(results, cache_time = 0) #Tellegram cache is case insencitive
