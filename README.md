@@ -79,7 +79,7 @@ And enjoy your bot!
 
 ## Heroku on polling
 
-Assuming you already have heroku installed on your machine,   
+Assuming you already have heroku CLI installed on your machine,   
 Run from terminal:
 
 ```bash
