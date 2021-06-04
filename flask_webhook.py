@@ -1,6 +1,6 @@
 import json
 import logging
-from urllib.parse import urljoin
+#from urllib.parse import urljoin, quote
 
 from flask import Flask, request
 from telegram import Bot, Update
@@ -26,29 +26,19 @@ except ImportError:
     TOKEN = os.getenv("TOKEN")
     HOSTING_URL = os.getenv("HOSTING_URL")
 
+
 app = Flask(__name__)
+bot = Bot(TOKEN)
+dispatcher = Dispatcher(bot, None, workers=0, use_context=True)
+dispatcher = get_dispatcher(dispatcher)
 
+bot.delete_webhook()
+url = HOSTING_URL +TOKEN
+bot.set_webhook(url=url)
 
-def main() -> None:
-
-    # Create filter to check if a user is admin
-    bot = Bot(TOKEN)
-    dispatcher = Dispatcher(bot, None, workers=0, use_context=True)
-    dispatcher = get_dispatcher(dispatcher)
-
-    bot.delete_webhook()
-    url = urljoin(HOSTING_URL, TOKEN)
-    bot.set_webhook(url=url)
-
-    @app.route('/' + TOKEN, methods=['POST'])
-    def webhook():
-        json_string = request.stream.read().decode('utf-8')
-        update = Update.de_json(json.loads(json_string), bot)
-        dispatcher.process_update(update)
-        return 'ok', 200
-
-
-main()
-# since this module is imported in wsgi, so __name__ is not  '__main__'
-# if __name__ == '__main__':
-#    main()
+@app.route('/' + TOKEN, methods=['POST'])
+def webhook():
+    json_string = request.stream.read().decode('utf-8')
+    update = Update.de_json(json.loads(json_string), bot)
+    dispatcher.process_update(update)
+    return 'ok', 200
